@@ -7,7 +7,7 @@ export const personalInfo = {
   address: '28/4 M 5, Sub-district: Taweewattana, District: Sai Noi, Province: Nonthaburi 11150',
   email: 'induthaitharathip@gmail.com',
   phone: '095-667-9573',
-  github: 'https://github.com/tharathip',
+  github: 'https://github.com/tharathip15',
   linkedin: 'https://linkedin.com/in/tharathip',
   availableForHire: true,
 };
