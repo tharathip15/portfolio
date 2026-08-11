@@ -391,13 +391,12 @@ const Hero = () => {
       {/* Scroll Indicator */}
       <motion.div
         style={{
-          position: 'absolute',
-          bottom: '32px',
+          marginTop: '32px',
           color: 'var(--text-muted)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '12px',
+          gap: '8px',
           cursor: 'pointer'
         }}
         onClick={() => scrollTo('projects')}

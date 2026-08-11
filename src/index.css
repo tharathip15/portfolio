@@ -268,3 +268,60 @@ body {
   color: transparent;
 }
 
+/* ─────────────────────────────────────────────
+   Mobile Responsiveness & Touch Optimization
+   ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .section-container {
+    padding: 3.5rem 1rem !important;
+  }
+
+  /* Button stacking on mobile */
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 14px 20px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Fix horizontal overflow in code blocks */
+  div[style*="font-mono"] {
+    word-break: break-word;
+  }
+
+  /* Adjust grid columns for phone screens */
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Compact padding for cards on small smartphones */
+  div[style*="borderRadius: 28"] {
+    padding: 18px 14px !important;
+  }
+
+  /* Stacking social buttons on contact */
+  #contact div[style*="flex-wrap"] {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #contact a {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+}
+

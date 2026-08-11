@@ -35,10 +35,10 @@ const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) =
       ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
       : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, exitEnd],
     isFirst
-      ? [0, 0, -20]
+      ? [0, 0, -10]
       : isLast
-      ? [60, 0, 0]
-      : [60, 0, 0, -20]
+      ? [20, 0, 0]
+      : [20, 0, 0, -10]
   );
 
   const y = useTransform(
@@ -49,10 +49,10 @@ const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) =
       ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
       : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, exitEnd],
     isFirst
-      ? [0, 0, -25]
+      ? [0, 0, -15]
       : isLast
-      ? [80, 0, 0]
-      : [80, 0, 0, -25]
+      ? [40, 0, 0]
+      : [40, 0, 0, -15]
   );
 
   const opacity = useTransform(
@@ -556,8 +556,10 @@ const About = () => {
 
   return (
     <section id="about" style={{ width: '100%', position: 'relative', zIndex: 1 }}>
+      {/* Desktop 3D Scroll View */}
       <div
         ref={containerRef}
+        className="about-desktop-view"
         style={{
           position: 'relative',
           height: `${Math.round(totalBlocks * 120)}vh`,
@@ -597,6 +599,36 @@ const About = () => {
           })}
         </div>
       </div>
+
+      {/* Mobile Touch Stack View */}
+      <div className="about-mobile-view" style={{ padding: '60px 16px 40px 16px', display: 'flex', flexDirection: 'column', gap: '20px', background: 'var(--bg-primary)' }}>
+        {blocks.map((block, i) => (
+          <div key={i} style={{
+            background: 'rgba(15, 23, 42, 0.96)',
+            border: '1px solid rgba(0, 240, 255, 0.25)',
+            borderRadius: 20,
+            padding: '20px 16px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute', top: 0, left: '10%', right: '10%', height: 2,
+              background: 'linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent)',
+              boxShadow: '0 0 10px var(--accent-cyan)',
+            }} />
+            {block.content}
+          </div>
+        ))}
+      </div>
+
+      <style>{`
+        .about-mobile-view { display: none; }
+        @media (max-width: 768px) {
+          .about-desktop-view { display: none !important; }
+          .about-mobile-view { display: flex !important; }
+        }
+      `}</style>
     </section>
   );
 };
