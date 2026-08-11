@@ -1,7 +1,73 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { education, personalInfo, certificates } from '../data/portfolio';
-import { GraduationCap, Code2, Sparkles, Terminal, Award, Cpu, CheckCircle2, MapPin, Zap, Layers, Server } from 'lucide-react';
+import { GraduationCap, Code2, Sparkles, Terminal, Award, Cpu, CheckCircle2, MapPin, Zap, Layers, Server, Compass } from 'lucide-react';
+
+/* ─────────────────────────────────────────────
+   Mobile Gyroscope Tilt Hook
+   ───────────────────────────────────────────── */
+const useGyroscope = () => {
+  const [gyro, setGyro] = useState({ rotateX: 0, rotateY: 0, active: false, needsPermission: false });
+
+  useEffect(() => {
+    let initialBeta = null;
+
+    const handleOrientation = (e) => {
+      if (e.gamma !== null && e.beta !== null) {
+        if (initialBeta === null) initialBeta = e.beta;
+
+        // gamma: left-right tilt (-30 to +30 deg) -> rotateY (-14 to +14 deg)
+        const clampGamma = Math.max(-35, Math.min(35, e.gamma));
+        const rotateY = (clampGamma / 35) * 14;
+
+        // beta: front-back tilt (relative to initial holding angle) -> rotateX (-14 to +14 deg)
+        const deltaBeta = Math.max(-35, Math.min(35, e.beta - initialBeta));
+        const rotateX = -(deltaBeta / 35) * 14;
+
+        setGyro({ rotateX, rotateY, active: true, needsPermission: false });
+      }
+    };
+
+    if (typeof window !== 'undefined' && window.DeviceOrientationEvent) {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        setGyro(g => ({ ...g, needsPermission: true }));
+      } else {
+        window.addEventListener('deviceorientation', handleOrientation);
+      }
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('deviceorientation', handleOrientation);
+      }
+    };
+  }, []);
+
+  const requestPermission = async () => {
+    if (typeof DeviceOrientationEvent?.requestPermission === 'function') {
+      try {
+        const permissionState = await DeviceOrientationEvent.requestPermission();
+        if (permissionState === 'granted') {
+          let initialBeta = null;
+          window.addEventListener('deviceorientation', (e) => {
+            if (e.gamma !== null && e.beta !== null) {
+              if (initialBeta === null) initialBeta = e.beta;
+              const clampGamma = Math.max(-35, Math.min(35, e.gamma));
+              const rotateY = (clampGamma / 35) * 14;
+              const deltaBeta = Math.max(-35, Math.min(35, e.beta - initialBeta));
+              const rotateX = -(deltaBeta / 35) * 14;
+              setGyro({ rotateX, rotateY, active: true, needsPermission: false });
+            }
+          });
+        }
+      } catch (err) {
+        console.error('Gyroscope permission denied:', err);
+      }
+    }
+  };
+
+  return { ...gyro, requestPermission };
+};
 
 /* ─────────────────────────────────────────────
    Block3D — Interactive Holographic 3D Card
@@ -177,6 +243,45 @@ const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) =
 };
 
 /* ─────────────────────────────────────────────
+   Mobile Gyroscope 3D Tilt Card
+   ───────────────────────────────────────────── */
+const MobileGyroCard = ({ children, gyro }) => {
+  return (
+    <div style={{ perspective: 1000, width: '100%' }}>
+      <motion.div
+        animate={{
+          rotateY: gyro.active ? gyro.rotateY : 0,
+          rotateX: gyro.active ? gyro.rotateX : 0,
+        }}
+        transition={{ type: 'spring', stiffness: 180, damping: 18 }}
+        style={{
+          background: 'rgba(15, 23, 42, 0.96)',
+          border: '1px solid rgba(0, 240, 255, 0.3)',
+          borderRadius: 22,
+          padding: '20px 16px',
+          boxShadow: gyro.active
+            ? `${gyro.rotateY * -2}px ${gyro.rotateX * 2}px 25px rgba(0,240,255,0.2), 0 10px 30px rgba(0,0,0,0.6)`
+            : '0 10px 30px rgba(0,0,0,0.6)',
+          position: 'relative',
+          overflow: 'hidden',
+          transformStyle: 'preserve-3d',
+          WebkitFontSmoothing: 'antialiased',
+        }}
+      >
+        <div style={{
+          position: 'absolute', top: 0, left: '10%', right: '10%', height: 2,
+          background: 'linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent)',
+          boxShadow: '0 0 10px var(--accent-cyan)',
+        }} />
+        <div style={{ position: 'relative', zIndex: 2, transform: 'translateZ(25px)' }}>
+          {children}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+/* ─────────────────────────────────────────────
    Progress Dots with Interactive Tooltips
    ───────────────────────────────────────────── */
 const ProgressDots = ({ total, scrollYProgress, containerRef, labels = [] }) => {
@@ -245,24 +350,16 @@ const DotIndicator = ({ label, scrollYProgress, blockMid, onClick }) => {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-      {/* Tooltip on hover */}
       {hovered && (
         <motion.div
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 10 }}
           style={{
-            position: 'absolute',
-            right: 24,
-            whiteSpace: 'nowrap',
-            background: 'rgba(11, 15, 23, 0.9)',
-            border: '1px solid rgba(0, 240, 255, 0.3)',
-            color: 'var(--text-primary)',
-            padding: '4px 10px',
-            borderRadius: 6,
-            fontSize: 11,
-            fontFamily: 'var(--font-mono)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+            position: 'absolute', right: 24, whiteSpace: 'nowrap',
+            background: 'rgba(11, 15, 23, 0.9)', border: '1px solid rgba(0, 240, 255, 0.3)',
+            color: 'var(--text-primary)', padding: '4px 10px', borderRadius: 6,
+            fontSize: 11, fontFamily: 'var(--font-mono)', boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
             pointerEvents: 'none',
           }}
         >
@@ -274,25 +371,21 @@ const DotIndicator = ({ label, scrollYProgress, blockMid, onClick }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          width: 10,
-          height: 10,
-          borderRadius: '50%',
-          background: rawBg,
-          boxShadow: rawShadow,
-          scale,
-          cursor: 'pointer',
+          width: 10, height: 10, borderRadius: '50%',
+          background: rawBg, boxShadow: rawShadow, scale, cursor: 'pointer',
         }}
       />
     </div>
   );
 };
 
-
 /* ─────────────────────────────────────────────
    Main About Section with 6 React Bits Blocks
    ───────────────────────────────────────────── */
 const About = () => {
   const containerRef = useRef(null);
+  const gyro = useGyroscope();
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -312,7 +405,6 @@ const About = () => {
     {
       content: (
         <div style={{ textAlign: 'center' }}>
-          {/* Avatar Initials Badge with Orbit Ring */}
           <div style={{ position: 'relative', width: 72, height: 72, margin: '0 auto 20px auto' }}>
             <div style={{
               position: 'absolute', inset: -4, borderRadius: '50%',
@@ -342,10 +434,8 @@ const About = () => {
           </div>
 
           <h2 style={{
-            fontSize: 'clamp(2.2rem, 5.5vw, 4rem)',
-            fontFamily: 'var(--font-display)', fontWeight: 700,
-            background: 'var(--gradient-accent)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            fontSize: 'clamp(2.2rem, 5.5vw, 4rem)', fontFamily: 'var(--font-display)', fontWeight: 700,
+            background: 'var(--gradient-accent)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             margin: '0 0 12px 0', lineHeight: 1.1,
           }}>
             Who I Am
@@ -353,13 +443,11 @@ const About = () => {
 
           <p style={{
             color: 'var(--text-muted)', fontSize: 'clamp(0.95rem, 1.8vw, 1.15rem)',
-            maxWidth: 560, margin: '0 auto 24px auto', lineHeight: 1.7,
-            fontFamily: 'var(--font-body)',
+            maxWidth: 560, margin: '0 auto 24px auto', lineHeight: 1.7, fontFamily: 'var(--font-body)',
           }}>
             Bridging hardware & software — from enterprise web platforms to IT infrastructure & IoT automation.
           </p>
 
-          {/* Interactive Tech Badge Pills */}
           <div style={{
             display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8, maxWidth: 600, margin: '0 auto'
           }}>
@@ -386,7 +474,6 @@ const About = () => {
     {
       content: (
         <div>
-          {/* Terminal Window Header */}
           <div style={{
             background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '12px 12px 0 0', padding: '10px 16px',
@@ -412,7 +499,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* IDE Code Content */}
           <div style={{
             background: 'rgba(5, 10, 20, 0.95)', border: '1px solid rgba(255,255,255,0.08)',
             borderTop: 'none', borderRadius: '0 0 12px 12px', padding: '16px 20px',
@@ -428,7 +514,6 @@ const About = () => {
             <div>{'}'}</div>
           </div>
 
-          {/* Interactive Feature Pills */}
           <div style={{
             marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10
           }}>
@@ -457,7 +542,7 @@ const About = () => {
       ),
     },
 
-    // ── Block 2: Education 1 — ปวช. Vocational Certificate
+    // ── Block 2: Education 1 — ปวช.
     {
       content: (
         <div>
@@ -467,7 +552,7 @@ const About = () => {
       ),
     },
 
-    // ── Block 3: Education 2 — ปวส. Technical Diploma (Honors 3.92 GPA)
+    // ── Block 3: Education 2 — ปวส.
     {
       content: (
         <div>
@@ -477,7 +562,7 @@ const About = () => {
       ),
     },
 
-    // ── Block 4: Education 3 — ป.ตรี Bachelor's Degree (Electronics Engineering)
+    // ── Block 4: Education 3 — ป.ตรี
     {
       content: (
         <div>
@@ -502,8 +587,7 @@ const About = () => {
             Academic excellence & enterprise system engineering track record
           </p>
 
-          {/* 4 Counter Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat( auto-fit, minmax(160px, 1fr) )', gap: 12, marginBottom: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat( auto-fit, minmax(130px, 1fr) )', gap: 12, marginBottom: 20 }}>
             {[
               { value: '9+', label: 'Projects Deployed', sub: 'Enterprise & Web Apps', color: 'var(--accent-cyan)' },
               { value: '3.92', label: 'Vocational GPA', sub: 'Honors Grade', color: 'var(--accent-mint)' },
@@ -530,7 +614,6 @@ const About = () => {
             ))}
           </div>
 
-          {/* Certificates list chips */}
           <div style={{
             background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)',
             borderRadius: 12, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap'
@@ -571,7 +654,6 @@ const About = () => {
           overflow: 'hidden', perspective: 1200, perspectiveOrigin: 'center 55%',
           background: 'var(--bg-primary)', zIndex: 2,
         }}>
-          {/* Subtle Cyberpunk Ambient Background */}
           <div style={{
             position: 'absolute', inset: 0,
             backgroundImage: 'radial-gradient(rgba(0, 240, 255, 0.04) 1px, transparent 1px)',
@@ -600,25 +682,37 @@ const About = () => {
         </div>
       </div>
 
-      {/* Mobile Touch Stack View */}
+      {/* Mobile Gyroscope 3D Touch Stack View */}
       <div className="about-mobile-view" style={{ padding: '60px 16px 40px 16px', display: 'flex', flexDirection: 'column', gap: '20px', background: 'var(--bg-primary)' }}>
-        {blocks.map((block, i) => (
-          <div key={i} style={{
-            background: 'rgba(15, 23, 42, 0.96)',
-            border: '1px solid rgba(0, 240, 255, 0.25)',
-            borderRadius: 20,
-            padding: '20px 16px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
+        {/* Gyro status badge */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
+          {gyro.needsPermission ? (
+            <button
+              onClick={gyro.requestPermission}
+              style={{
+                background: 'rgba(0, 240, 255, 0.1)', border: '1px solid rgba(0, 240, 255, 0.3)',
+                color: 'var(--accent-cyan)', padding: '6px 14px', borderRadius: 999,
+                fontSize: 12, fontFamily: 'var(--font-mono)', cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 6
+              }}
+            >
+              <Compass size={14} /> Enable Gyro 3D Tilt 📱
+            </button>
+          ) : gyro.active ? (
             <div style={{
-              position: 'absolute', top: 0, left: '10%', right: '10%', height: 2,
-              background: 'linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent)',
-              boxShadow: '0 0 10px var(--accent-cyan)',
-            }} />
+              background: 'rgba(0, 255, 135, 0.1)', border: '1px solid rgba(0, 255, 135, 0.3)',
+              color: 'var(--accent-mint)', padding: '4px 12px', borderRadius: 999,
+              fontSize: 11, fontFamily: 'var(--font-mono)', display: 'inline-flex', alignItems: 'center', gap: 6
+            }}>
+              <Compass size={13} className="spin-slow" /> 📱 Gyro 3D Motion Active — Tilt Phone!
+            </div>
+          ) : null}
+        </div>
+
+        {blocks.map((block, i) => (
+          <MobileGyroCard key={i} gyro={gyro}>
             {block.content}
-          </div>
+          </MobileGyroCard>
         ))}
       </div>
 
