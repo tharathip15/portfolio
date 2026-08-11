@@ -20,49 +20,48 @@ const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) =
     setMousePos({ x: x * 14, y: -y * 14 });
   };
 
-  const overlapBefore = index === 0 ? 0 : range * 0.15;
-  const enterStart = Math.max(0, startAt - overlapBefore);
-  const enterEnd   = startAt + range * 0.15;
-  const holdEnd    = startAt + range * 0.85;
-  const fadeOutEnd = Math.min(1, holdEnd + 0.06);
+  const transitionWindow = 0.025;
+  const enterStart = startAt;
+  const enterEnd   = Math.min(endAt, startAt + transitionWindow);
+  const exitStart  = Math.max(startAt, endAt - transitionWindow);
+  const exitEnd    = endAt;
   const isFirst    = index === 1;
 
   const rotateX = useTransform(
     scrollYProgress,
     isFirst
-      ? [0, holdEnd, fadeOutEnd]
+      ? [0, exitStart, exitEnd]
       : isLast
-      ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
-      : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, fadeOutEnd],
+      ? [enterStart, enterEnd, 1]
+      : [enterStart, enterEnd, exitStart, exitEnd],
     isFirst
       ? [0, 0, -10]
       : isLast
-      ? [20, 0, 0]
-      : [20, 0, 0, -10]
+      ? [10, 0, 0]
+      : [10, 0, 0, -10]
   );
 
   const y = useTransform(
     scrollYProgress,
     isFirst
-      ? [0, holdEnd, fadeOutEnd]
+      ? [0, exitStart, exitEnd]
       : isLast
-      ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
-      : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, fadeOutEnd],
+      ? [enterStart, enterEnd, 1]
+      : [enterStart, enterEnd, exitStart, exitEnd],
     isFirst
-      ? [0, 0, -15]
+      ? [0, 0, -25]
       : isLast
-      ? [40, 0, 0]
-      : [40, 0, 0, -15]
+      ? [25, 0, 0]
+      : [25, 0, 0, -25]
   );
 
-  // Fade out opacity to 0 immediately when next card lands to prevent card bleed-through!
   const opacity = useTransform(
     scrollYProgress,
     isFirst
-      ? [0, holdEnd, fadeOutEnd]
+      ? [0, exitStart, exitEnd]
       : isLast
-      ? [Math.max(0, enterStart - 0.02), enterEnd, 1]
-      : [Math.max(0, enterStart - 0.02), enterEnd, holdEnd, fadeOutEnd],
+      ? [enterStart, enterEnd, 1]
+      : [enterStart, enterEnd, exitStart, exitEnd],
     isFirst
       ? [1, 1, 0]
       : isLast
@@ -73,24 +72,24 @@ const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) =
   const scale = useTransform(
     scrollYProgress,
     isFirst
-      ? [0, holdEnd, fadeOutEnd]
+      ? [0, exitStart, exitEnd]
       : isLast
-      ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
-      : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, fadeOutEnd],
+      ? [enterStart, enterEnd, 1]
+      : [enterStart, enterEnd, exitStart, exitEnd],
     isFirst
-      ? [1, 1, 0.95]
+      ? [1, 1, 0.96]
       : isLast
-      ? [0.85, 1, 1]
-      : [0.85, 1, 1, 0.95]
+      ? [0.96, 1, 1]
+      : [0.96, 1, 1, 0.96]
   );
 
   const pointerEvents = useTransform(
     scrollYProgress,
     isFirst
-      ? [0, holdEnd, fadeOutEnd]
+      ? [0, exitStart, exitEnd]
       : isLast
-      ? [Math.max(0, enterStart - 0.03), enterEnd, 1]
-      : [Math.max(0, enterStart - 0.03), enterEnd, holdEnd, fadeOutEnd],
+      ? [enterStart, enterEnd, 1]
+      : [enterStart, enterEnd, exitStart, exitEnd],
     isFirst
       ? ['auto', 'auto', 'none']
       : isLast
