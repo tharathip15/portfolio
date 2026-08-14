@@ -370,9 +370,44 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* The desktop progress rail obstructs content on narrow screens. */
+  /* Mobile About progress rail: minimal vertical dots like the reference design. */
   #about > div > div > div:nth-child(2) {
+    position: fixed !important;
+    left: 8px !important;
+    right: auto !important;
+    top: 50% !important;
+    width: 18px !important;
+    height: auto !important;
+    max-width: 18px !important;
+    transform: translateY(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 28px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  #about > div > div > div:nth-child(2) > div {
+    width: 18px !important;
+    height: 18px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #about > div > div > div:nth-child(2) > div > div:first-child {
     display: none !important;
+  }
+
+  #about > div > div > div:nth-child(2) > div > div:last-child {
+    width: 12px !important;
+    height: 12px !important;
+    min-width: 12px !important;
+    min-height: 12px !important;
   }
 }
 
