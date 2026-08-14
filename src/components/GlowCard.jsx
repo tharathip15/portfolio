@@ -6,7 +6,6 @@ const GlowCard = ({
   style = {},
   className = '',
   glowColor = 'var(--accent-cyan, #00F0FF)',
-  as: Component = 'div',
   ...props
 }) => {
   const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });

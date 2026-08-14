@@ -1,13 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { education, personalInfo, certificates } from '../data/portfolio';
-import { GraduationCap, Code2, Sparkles, Terminal, Award, Cpu, CheckCircle2, MapPin, Zap, Layers, Server } from 'lucide-react';
+import { Sparkles, Terminal, Award, Cpu, MapPin, Zap } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    Block3D — Interactive Holographic 3D Card
    ───────────────────────────────────────────── */
 const Block3D = ({ children, scrollYProgress, startAt, endAt, index, isLast }) => {
-  const range = endAt - startAt;
 
   // Smooth 3D mouse tilt interaction
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -566,7 +565,7 @@ const About = () => {
 /* ─────────────────────────────────────────────
    Education Timeline Stepper
    ───────────────────────────────────────────── */
-const EducationStepper = ({ currentStep, totalSteps }) => (
+const EducationStepper = ({ currentStep }) => (
   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 20 }}>
     {[1, 2, 3].map(step => {
       const active = step <= currentStep;
@@ -600,7 +599,7 @@ const EducationStepper = ({ currentStep, totalSteps }) => (
 /* ─────────────────────────────────────────────
    Education Card Component
    ───────────────────────────────────────────── */
-const EducationCard = ({ item, number, isHonors = false, isFinal = false }) => {
+const EducationCard = ({ item, isHonors = false, isFinal = false }) => {
   if (!item) return null;
   const accentColor = item.color || 'var(--accent-cyan)';
 

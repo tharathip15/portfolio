@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Briefcase, Award } from 'lucide-react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { Award } from 'lucide-react';
 import { experience } from '../data/portfolio';
 
 const Experience = () => {

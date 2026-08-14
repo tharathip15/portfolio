@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
-const ScrollExpand = ({ children, expandFrom = 'card', className = '' }) => {
+const ScrollExpand = ({ children, className = '' }) => {
   const containerRef = useRef(null);
   
   const { scrollYProgress } = useScroll({

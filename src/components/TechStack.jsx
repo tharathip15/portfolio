@@ -3,10 +3,12 @@ import { motion } from 'framer-motion';
 import DriftWall from './DriftWall';
 import { techStack } from '../data/portfolio';
 
+const CATEGORIES = ['All', 'Frontend', 'Backend', 'Database', 'Tools', 'Auth'];
+
 const TechStack = () => {
   const [activeCategory, setActiveCategory] = useState('All');
 
-  const categories = ['All', 'Frontend', 'Backend', 'Database', 'Tools', 'Auth'];
+  const categories = CATEGORIES;
 
   const filteredItems = useMemo(() => {
     if (!techStack) return [];
@@ -14,13 +16,10 @@ const TechStack = () => {
     return techStack.filter(item => item.category === activeCategory);
   }, [activeCategory]);
 
-  const stats = useMemo(() => {
-    if (!techStack) return [];
-    return categories.slice(1).map(cat => ({
-      category: cat,
-      count: techStack.filter(item => item.category === cat).length
-    }));
-  }, []);
+  const stats = CATEGORIES.slice(1).map(cat => ({
+    category: cat,
+    count: techStack?.filter(item => item.category === cat).length ?? 0
+  }));
 
   return (
     <section id="tech" style={{
