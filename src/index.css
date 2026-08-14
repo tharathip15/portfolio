@@ -379,16 +379,19 @@ body {
     overflow-x: hidden !important;
   }
 
-
   #about > div > div > div:nth-child(2) {
     position: fixed !important;
     left: 8px !important;
     right: auto !important;
     top: 50% !important;
+    width: 24px !important;
+    height: auto !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
     transform: translateY(-50%) !important;
+    align-items: center !important;
     gap: 12px !important;
     padding: 8px 5px !important;
-    max-width: calc(100vw - 16px);
     border: 1px solid rgba(0, 240, 255, 0.16);
     border-radius: 999px;
     background: rgba(11, 15, 23, 0.72);
@@ -402,13 +405,13 @@ body {
     justify-content: center;
   }
 
+  #about > div > div > div:nth-child(2) > div > div:first-child {
+    display: none !important;
+  }
+
   #about > div > div > div:nth-child(2) > div > div:last-child {
     width: 8px !important;
     height: 8px !important;
   }
 
-  #about > div > div > div:nth-child(2) > div > div:first-child {
-    right: auto !important;
-    left: 22px !important;
-  }
 }
