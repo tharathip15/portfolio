@@ -368,3 +368,47 @@ body {
     min-height: 45vh !important;
   }
 }
+
+@media (max-width: 768px) {
+  /* Keep the About step navigation visible at the left edge without covering cards. */
+  #about {
+    overflow-x: hidden;
+  }
+
+  #about > div > div {
+    overflow-x: hidden !important;
+  }
+
+
+  #about > div > div > div:nth-child(2) {
+    position: fixed !important;
+    left: 8px !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    gap: 12px !important;
+    padding: 8px 5px !important;
+    max-width: calc(100vw - 16px);
+    border: 1px solid rgba(0, 240, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(11, 15, 23, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  #about > div > div > div:nth-child(2) > div {
+    width: 14px !important;
+    height: 14px !important;
+    justify-content: center;
+  }
+
+  #about > div > div > div:nth-child(2) > div > div:last-child {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  #about > div > div > div:nth-child(2) > div > div:first-child {
+    right: auto !important;
+    left: 22px !important;
+  }
+}
