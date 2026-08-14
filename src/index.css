@@ -326,39 +326,8 @@ body {
 }
 
 
-/* Mobile: render the About cards in normal document flow instead of the desktop scroll deck. */
+/* Mobile keeps the same sticky About scroll deck as desktop. */
 @media (max-width: 768px) {
-  #about > div {
-    height: auto !important;
-  }
-
-  #about > div > div {
-    position: relative !important;
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    perspective: none !important;
-  }
-
-  #about > div > div > div:not(:first-child) {
-    position: relative !important;
-    inset: auto !important;
-    width: 100% !important;
-    min-height: 0 !important;
-    padding: 16px !important;
-    opacity: 1 !important;
-    transform: none !important;
-    pointer-events: auto !important;
-  }
-
-  #about > div > div > div:not(:first-child) > div {
-    transform: none !important;
-  }
-
-  #about > div > div > div:first-child {
-    display: none !important;
-  }
-
   #tech {
     min-height: 0 !important;
     padding-top: 4rem !important;
@@ -370,11 +339,11 @@ body {
 }
 
 @media (max-width: 768px) {
-  /* Mobile About progress rail: visible vertical dots. */
+  /* Match desktop: fixed right-side progress dots driven by About scroll progress. */
   #about > div > div > div:nth-child(2) {
     position: fixed !important;
-    left: 14px !important;
-    right: auto !important;
+    left: auto !important;
+    right: 14px !important;
     top: 50% !important;
     width: 20px !important;
     height: auto !important;
