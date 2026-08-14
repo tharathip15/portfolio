@@ -345,34 +345,56 @@ body {
   }
 }
 
+/* Minimal mobile About: normal document flow is reliable on touch screens. */
 @media (max-width: 768px) {
-  /* Match desktop: fixed right-side progress dots driven by About scroll progress. */
-  #about > div > div > div:nth-child(2) {
-    position: fixed !important;
-    left: auto !important;
-    right: 14px !important;
-    top: 50% !important;
-    width: 20px !important;
+  #about > div {
     height: auto !important;
-    max-width: 20px !important;
-    transform: translateY(-50%) !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 28px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    z-index: 9999 !important;
+  }
+
+  #about > div > div {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    perspective: none !important;
+  }
+
+  #about > div > div > div:not(:first-child) {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 12px 16px !important;
+    opacity: 1 !important;
+    transform: none !important;
     pointer-events: auto !important;
   }
 
-  #about > div > div > div:nth-child(2) > div {
-    position: relative !important;
-    width: 20px !important;
-    height: 20px !important;
+  #about > div > div > div:not(:first-child) > div {
+    transform: none !important;
+  }
+
+  #about > div > div > div:first-child {
+    display: none !important;
+  }
+
+  #about > div > div > div:nth-child(2) {
+    position: fixed !important;
+    left: auto !important;
+    right: 8px !important;
+    top: 50% !important;
+    width: 8px !important;
+    max-width: 8px !important;
+    gap: 10px !important;
+    transform: translateY(-50%) !important;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+  }
+
+  #about > div > div > div:nth-child(2) > div {
+    width: 8px !important;
+    height: 8px !important;
   }
 
   #about > div > div > div:nth-child(2) > div > div:first-child {
@@ -380,20 +402,19 @@ body {
   }
 
   #about > div > div > div:nth-child(2) > div > div:last-child {
-    display: block !important;
-    width: 12px !important;
-    height: 12px !important;
-    min-width: 12px !important;
-    min-height: 12px !important;
-    border-radius: 50% !important;
-    background: rgba(148, 163, 184, 0.75) !important;
-    box-shadow: 0 0 4px rgba(148, 163, 184, 0.4) !important;
+    width: 6px !important;
+    height: 6px !important;
+    min-width: 6px !important;
+    min-height: 6px !important;
+    background: rgba(148, 163, 184, 0.7) !important;
+    box-shadow: none !important;
   }
 
   #about > div > div > div:nth-child(2) > div:nth-child(2) > div:last-child {
-    width: 18px !important;
-    height: 18px !important;
-    background: #00f0ff !important;
-    box-shadow: 0 0 12px #00f0ff, 0 0 28px rgba(0, 240, 255, 0.65) !important;
+    width: 8px !important;
+    height: 8px !important;
+    background: var(--accent-cyan) !important;
+    box-shadow: 0 0 8px var(--accent-cyan) !important;
   }
 }
+
