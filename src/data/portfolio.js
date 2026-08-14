@@ -7,8 +7,8 @@ export const personalInfo = {
   address: '28/4 M 5, Sub-district: Taweewattana, District: Sai Noi, Province: Nonthaburi 11150',
   email: 'induthaitharathip@gmail.com',
   phone: '095-667-9573',
-  github: 'https://github.com/tharathip15',
-  linkedin: 'https://linkedin.com/in/tharathip',
+  github: 'https://github.com/Tharathip15',
+  linkedin: 'https://www.linkedin.com/in/tharathip-induthai-40b82b429',
   availableForHire: true,
 };
 
@@ -294,8 +294,8 @@ export const skills = {
 };
 
 export const socialLinks = [
-  { name: 'GitHub', url: 'https://github.com/tharathip', icon: 'Github' },
-  { name: 'LinkedIn', url: 'https://linkedin.com/in/tharathip', icon: 'Linkedin' },
+  { name: 'GitHub', url: 'https://github.com/Tharathip15', icon: 'Github' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/tharathip-induthai-40b82b429', icon: 'Linkedin' },
   { name: 'Email', url: 'mailto:induthaitharathip@gmail.com', icon: 'Mail' },
 ];
 
