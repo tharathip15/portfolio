@@ -418,3 +418,47 @@ body {
   }
 }
 
+@keyframes about-mobile-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes about-mobile-glow {
+  0%, 100% {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), 0 0 0 rgba(0, 240, 255, 0);
+  }
+  50% {
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), 0 0 22px rgba(0, 240, 255, 0.1);
+  }
+}
+
+@media (max-width: 768px) {
+  #about > div > div > div:nth-child(n + 3) {
+    animation: about-mobile-reveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  #about > div > div > div:nth-child(3) { animation-delay: 0.05s; }
+  #about > div > div > div:nth-child(4) { animation-delay: 0.12s; }
+  #about > div > div > div:nth-child(5) { animation-delay: 0.19s; }
+  #about > div > div > div:nth-child(6) { animation-delay: 0.26s; }
+  #about > div > div > div:nth-child(7) { animation-delay: 0.33s; }
+  #about > div > div > div:nth-child(8) { animation-delay: 0.40s; }
+
+  #about > div > div > div:nth-child(n + 3) > div {
+    animation: about-mobile-glow 4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #about > div > div > div:nth-child(n + 3),
+    #about > div > div > div:nth-child(n + 3) > div {
+      animation: none !important;
+    }
+  }
+}
+
