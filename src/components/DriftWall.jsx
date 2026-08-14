@@ -74,7 +74,7 @@ const DriftWall = ({ items = [], className = '' }) => {
   return (
     <div
       ref={containerRef}
-      className={className}
+      className={`drift-wall ${className}`.trim()}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{
@@ -102,7 +102,7 @@ const DriftItem = ({ item, smoothMouseX, smoothMouseY }) => {
   const yOffset = useTransform(smoothMouseY, val => val * item.speed * -1);
 
   return (
-    <motion.div
+    <motion.div className="drift-item"
       initial={{ opacity: 0, scale: 0.5, y: 30 }}
       whileInView={{ opacity: item.opacity, scale: item.scale, y: 0 }}
       viewport={{ once: true, margin: "50px" }}
