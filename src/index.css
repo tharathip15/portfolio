@@ -325,3 +325,46 @@ body {
   }
 }
 
+
+/* Mobile: render the About cards in normal document flow instead of the desktop scroll deck. */
+@media (max-width: 768px) {
+  #about > div {
+    height: auto !important;
+  }
+
+  #about > div > div {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    perspective: none !important;
+  }
+
+  #about > div > div > div:not(:first-child) {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 16px !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+
+  #about > div > div > div:not(:first-child) > div {
+    transform: none !important;
+  }
+
+  #about > div > div > div:first-child {
+    display: none !important;
+  }
+
+  #tech {
+    min-height: 0 !important;
+    padding-top: 4rem !important;
+  }
+
+  #tech > div[style*="minHeight"] {
+    min-height: 45vh !important;
+  }
+}
