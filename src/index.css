@@ -328,6 +328,13 @@ body {
 
 /* Mobile keeps the same sticky About scroll deck as desktop. */
 @media (max-width: 768px) {
+  #about,
+  #about > div,
+  #about > div > div {
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
+  }
+
   #tech {
     min-height: 0 !important;
     padding-top: 4rem !important;
