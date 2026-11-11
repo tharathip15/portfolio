@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Award } from 'lucide-react';
+import { Briefcase, CheckCircle2 } from 'lucide-react';
 import { experience } from '../data/portfolio';
 
 const Experience = () => {
@@ -21,32 +21,63 @@ const Experience = () => {
     <section
       id="experience"
       ref={containerRef}
-      style={{ padding: '6rem 2rem', position: 'relative' }}
+      style={{ padding: '6rem 1.5rem', position: 'relative', zIndex: 2 }}
     >
-      <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative' }}>
+      <div style={{ maxWidth: '1040px', margin: '0 auto', position: 'relative' }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          style={{ textAlign: 'center', marginBottom: '4rem' }}
+          style={{ textAlign: 'center', marginBottom: '3.5rem' }}
         >
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(56, 189, 248, 0.08)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '999px',
+              padding: '6px 16px',
+              marginBottom: '14px',
+              fontSize: '0.75rem',
+              fontFamily: 'var(--font-mono)',
+              color: 'var(--accent-cyan)',
+              letterSpacing: '0.08em',
+            }}
+          >
+            <Briefcase size={14} />
+            CAREER TRACK RECORD
+          </div>
+
           <h2
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+              fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)',
               fontWeight: 700,
               background: 'var(--gradient-accent)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              marginBottom: '1rem',
+              marginBottom: '0.5rem',
             }}
           >
             Experience
           </h2>
+          <p
+            style={{
+              color: 'var(--text-muted)',
+              fontFamily: 'var(--font-body)',
+              fontSize: '1rem',
+              maxWidth: '580px',
+              margin: '0 auto',
+            }}
+          >
+            ประสบการณ์ทำงานจริงด้าน IT Infrastructure, IoT Hardware และการพัฒนาระบบเว็บระดับองค์กร
+          </p>
         </motion.div>
 
         <div style={{ position: 'relative' }}>
-          {/* Timeline Line */}
+          {/* Timeline Base Line */}
           <div
             style={{
               position: 'absolute',
@@ -54,12 +85,12 @@ const Experience = () => {
               transform: 'translateX(-50%)',
               width: '2px',
               height: '100%',
-              background: 'var(--glass-border)',
+              background: 'rgba(148, 163, 184, 0.14)',
               display: 'none',
             }}
             className="timeline-bg"
           />
-          
+
           <svg
             style={{
               position: 'absolute',
@@ -84,28 +115,20 @@ const Experience = () => {
               y2="100%"
               stroke="url(#line-gradient)"
               strokeWidth="2"
-              style={{ pathLength, filter: 'drop-shadow(0 0 8px var(--accent-cyan))' }}
+              style={{ pathLength }}
             />
           </svg>
 
-          {/* Fallback CSS for mobile / desktop diff */}
-          <style dangerouslySetInnerHTML={{__html: `
-            @keyframes shimmer {
-              0% { background-position: -200% 0; }
-              100% { background-position: 200% 0; }
-            }
-            .shimmer-bg {
-              background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-              background-size: 200% 100%;
-              animation: shimmer 3s infinite linear;
-            }
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
             .timeline-bg, .timeline-svg {
               display: none;
             }
             .timeline-item {
               width: 100%;
-              padding-left: 2rem;
-              margin-bottom: 3rem;
+              padding-left: 1.75rem;
+              margin-bottom: 1.75rem;
               position: relative;
             }
             .timeline-node {
@@ -118,198 +141,192 @@ const Experience = () => {
               }
               .timeline-item {
                 width: 50%;
-                margin-bottom: 2rem;
+                margin-bottom: 1.5rem;
                 padding: 0;
               }
               .timeline-item:nth-child(odd) {
-                padding-right: 3rem;
+                padding-right: 2.5rem;
                 margin-left: 0;
-                text-align: right;
               }
               .timeline-item:nth-child(even) {
-                padding-left: 3rem;
+                padding-left: 2.5rem;
                 margin-left: 50%;
-              }
-              .timeline-node {
-                left: 50%;
-                transform: translateX(-50%);
               }
               .timeline-item:nth-child(odd) .timeline-node {
                 left: auto;
-                right: -3rem;
+                right: -2.5rem;
                 transform: translateX(50%);
               }
               .timeline-item:nth-child(even) .timeline-node {
-                left: -3rem;
+                left: -2.5rem;
                 transform: translateX(-50%);
               }
-              .item-content {
-                display: flex;
-                flex-direction: column;
-              }
-              .timeline-item:nth-child(odd) .item-content {
-                align-items: flex-end;
-              }
-              .timeline-item:nth-child(even) .item-content {
-                align-items: flex-start;
-              }
             }
-          `}} />
+          `,
+            }}
+          />
 
-          {experience.map((item, index) => (
-            <motion.div
-              key={item.id}
-              className="timeline-item"
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.5, delay: index * 0.3 }}
-            >
+          {experience.map((item, index) => {
+            const isCurrent = index === 0;
+            return (
               <motion.div
-                className="timeline-node"
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ type: 'spring', delay: index * 0.3 + 0.2 }}
-                style={{
-                  position: 'absolute',
-                  top: '2rem',
-                  width: '20px',
-                  height: '20px',
-                  borderRadius: '50%',
-                  background: 'var(--gradient-accent)',
-                  boxShadow: 'var(--glow-cyan)',
-                  zIndex: 2,
-                  border: '4px solid var(--bg-primary)',
-                }}
+                key={item.id}
+                className="timeline-item"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
               >
-                <motion.div
-                  animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                {/* Clean Timeline Node (Only current role has subtle indicator) */}
+                <div
+                  className="timeline-node"
                   style={{
                     position: 'absolute',
-                    inset: '-4px',
+                    top: '1.6rem',
+                    width: '14px',
+                    height: '14px',
                     borderRadius: '50%',
-                    border: '2px solid var(--accent-cyan)',
+                    background: isCurrent
+                      ? 'var(--accent-mint)'
+                      : 'var(--accent-cyan)',
+                    boxShadow: isCurrent
+                      ? '0 0 12px rgba(52, 211, 153, 0.6)'
+                      : 'none',
+                    zIndex: 2,
+                    border: '3px solid var(--bg-primary)',
                   }}
                 />
-              </motion.div>
 
-              <div
-                style={{
-                  background: 'var(--glass-bg)',
-                  border: '1px solid var(--glass-border)',
-                  borderRadius: '16px',
-                  padding: '2rem',
-                  position: 'relative',
-                  backdropFilter: 'var(--glass-blur)',
-                  WebkitBackdropFilter: 'var(--glass-blur)',
-                  overflow: 'hidden'
-                }}
-                className="item-content"
-              >
-                <div 
-                  className="shimmer-bg" 
+                {/* Compact, High-Craft Card (No looping shimmer slop) */}
+                <div
                   style={{
-                    position: 'absolute',
-                    inset: 0,
-                    pointerEvents: 'none',
-                    zIndex: 0
-                  }}
-                />
-                
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                  <motion.div
-                    initial={{ width: 0, opacity: 0 }}
-                    whileInView={{ width: 'auto', opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.3 + 0.4 }}
-                    style={{
-                      background: 'var(--bg-surface-hover)',
-                      padding: '0.25rem 1rem',
-                      borderRadius: '9999px',
-                      display: 'inline-flex',
-                      marginBottom: '1rem',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.85rem',
-                      color: 'var(--text-muted)',
-                      border: '1px solid var(--border-subtle)',
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {item.period}
-                  </motion.div>
-
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1.5rem',
-                    color: 'var(--text-primary)',
-                    marginBottom: '0.25rem',
-                  }}
-                >
-                  {item.role}
-                </h3>
-                <h4
-                  style={{
-                    color: 'var(--accent-cyan)',
-                    fontSize: '1.1rem',
-                    marginBottom: '1rem',
-                    fontWeight: 500,
-                  }}
-                >
-                  {item.company}
-                </h4>
-
-                <p
-                  style={{
-                    color: 'var(--text-muted)',
-                    lineHeight: 1.6,
-                    marginBottom: '1.5rem',
-                  }}
-                >
-                  {item.description}
-                </p>
-
-                <ul
-                  style={{
-                    listStyle: 'none',
-                    padding: 0,
-                    margin: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.5rem',
+                    background: 'rgba(17, 24, 39, 0.72)',
+                    border: `1px solid ${
+                      isCurrent
+                        ? 'rgba(56, 189, 248, 0.28)'
+                        : 'rgba(148, 163, 184, 0.14)'
+                    }`,
+                    borderRadius: '16px',
+                    padding: '1.4rem 1.6rem',
+                    position: 'relative',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
                     textAlign: 'left',
                   }}
                 >
-                  {item.achievements.map((achievement, i) => (
-                    <li
-                      key={i}
+                  {/* Top Row: Role & Period Pill */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: '10px',
+                      flexWrap: 'wrap',
+                      marginBottom: '0.35rem',
+                    }}
+                  >
+                    <h3
                       style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '0.75rem',
-                        color: 'var(--text-dim)',
-                        fontSize: '0.95rem',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '1.25rem',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)',
+                        margin: 0,
                       }}
                     >
-                      <Award
-                        size={16}
+                      {item.role}
+                    </h3>
+
+                    <span
+                      style={{
+                        background: isCurrent
+                          ? 'rgba(52, 211, 153, 0.12)'
+                          : 'rgba(255, 255, 255, 0.05)',
+                        border: `1px solid ${
+                          isCurrent
+                            ? 'rgba(52, 211, 153, 0.3)'
+                            : 'rgba(255, 255, 255, 0.1)'
+                        }`,
+                        color: isCurrent
+                          ? 'var(--accent-mint)'
+                          : 'var(--text-muted)',
+                        padding: '3px 10px',
+                        borderRadius: '999px',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.73rem',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {item.period}
+                    </span>
+                  </div>
+
+                  {/* Company Name */}
+                  <div
+                    style={{
+                      color: 'var(--accent-cyan)',
+                      fontSize: '0.95rem',
+                      marginBottom: '0.75rem',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.company}
+                  </div>
+
+                  {/* Concise Description */}
+                  <p
+                    style={{
+                      color: 'var(--text-muted)',
+                      fontSize: '0.88rem',
+                      lineHeight: 1.6,
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    {item.description}
+                  </p>
+
+                  {/* Compact Bullet Points */}
+                  <ul
+                    style={{
+                      listStyle: 'none',
+                      padding: '10px 12px',
+                      margin: 0,
+                      background: 'rgba(11, 15, 23, 0.6)',
+                      border: '1px solid rgba(148, 163, 184, 0.1)',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '6px',
+                    }}
+                  >
+                    {item.achievements.slice(0, 4).map((achievement, i) => (
+                      <li
+                        key={i}
                         style={{
-                          color: 'var(--accent-mint)',
-                          flexShrink: 0,
-                          marginTop: '2px',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '8px',
+                          color: 'var(--text-primary)',
+                          fontSize: '0.82rem',
+                          lineHeight: 1.45,
                         }}
-                      />
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
+                      >
+                        <CheckCircle2
+                          size={14}
+                          style={{
+                            color: 'var(--accent-cyan)',
+                            flexShrink: 0,
+                            marginTop: '2px',
+                          }}
+                        />
+                        <span>{achievement}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
